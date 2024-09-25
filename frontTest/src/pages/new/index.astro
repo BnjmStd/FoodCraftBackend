@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<style>
+    form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+
+        & input {
+            padding: 0.25rem;
+            border-radius: 0.1rem;
+            background: green;
+        }
+
+        & button {
+            padding: 0.25rem;
+            border-radius: 0.2rem;
+            border: none;
+
+            &:hover {
+                background: gray;
+            }
+        }
+    }
+</style>
+
+<Layout title="new User">
+    <form id="csvForm">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" />
+        </div>
+        <div>
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" />
+        </div>
+        <div>
+            <label for="glucosa">Glucosa:</label>
+            <input type="number" id="glucosa" name="glucosa" />
+        </div>
+        <div>
+            <label for="presion">Presión:</label>
+            <input type="number" id="presion" name="presion" />
+        </div>
+        <div>
+            <label for="colesterol">Colesterol:</label>
+            <input type="number" id="colesterol" name="colesterol" />
+        </div>
+        <div>
+            <label for="otras">Otras condiciones:</label>
+            <input type="text" id="otras" name="otras" />
+        </div>
+        <button type="submit">Agregar Dato</button>
+    </form>
+</Layout>
+
+<script>
+    const $form = document.getElementById("csvForm") as HTMLFormElement | null;
+
+    if (!$form) return;
+
+    $form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+
+        const data = {
+            nombre: formData.get("nombre"),
+            edad: formData.get("edad"),
+            glucosa: formData.get("glucosa"),
+            presion: formData.get("presion"),
+            colesterol: formData.get("colesterol"),
+            diabetes: formData.get("diabetes"),
+            hipertension: formData.get("hipertension"),
+            otras: formData.get("otras"),
+        };
+
+        fetch("http://127.0.0.1:5000/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("Resultado:", result);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    });
+</script>
