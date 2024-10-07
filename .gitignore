@@ -1,7 +1,7 @@
 envFood/
 .vscode
 node_modules/
-
+__pycache__
 # build output
 dist/
 
