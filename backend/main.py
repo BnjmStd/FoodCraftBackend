@@ -1,29 +1,24 @@
-from flask import * # bad practice
-import pickle
-
-# ORM 
-app = Flask(__name__)
-
+# pip install fastapi uvicorn
 # model = pickle.load(open('./model/model.pkl', 'rb'))
 
-@app.route('/', methods=['GET'])
-def welcome():
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import pickle
 
+app = FastAPI()
+
+@app.get("/")
+async def welcome():
     data = {
-        'message': 'Bienvenido a  MetaFoodCraft',
-        'status': 'success',
-        'items': ['🍌', '🍏', '🍉', '🥝']
+        "message": "Bienvenido a MetaFoodCraft",
+        "status": "success",
+        "items": ["🍌", "🍏", "🍉", "🥝"]
     }
+    return data
 
-    return jsonify(data)
+@app.get("/new")
+async def new_user():
+    return {"message": "Datos recibidos", "data": '🍉'}
 
-@app.route('/new', methods=['POST'])
-def newUser():
-    data = request.get_json()
-
-    print(data)  # Imprimir los datos recibidos
-
-    return jsonify({"message": "Datos recibidos", "data": data}), 200
-
-if __name__ == '__main__':
-    app.run()
+# Iniciar la aplicación con uvicorn:
+# uvicorn main:app --reload
